@@ -32,6 +32,8 @@ type CreateUserCommandHandler struct {
 }
 ```
 
+![Command Handler Screen](images/command_screen.png)
+
 ### Queries Example
 
 ```go
@@ -45,6 +47,8 @@ type GetUserQueryHandler struct {
     repository Repository
 }
 ```
+
+![Query Handler Screen](images/query_screen.png)
 
 ## Requirements
 

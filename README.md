@@ -2,6 +2,8 @@
 
 Easy navigation between Go Commands/Queries and their corresponding Handlers.
 
+[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/aykanferhat.go-cq-to-handler.svg)](https://marketplace.visualstudio.com/items?itemName=aykanferhat.go-cq-to-handler)
+
 ## Features
 
 This extension provides easy navigation from Command and Query structures to their corresponding Handler implementations in Go projects.
@@ -72,5 +74,13 @@ Initial release of Go Command/Query to Handler
 - Added support for Query to QueryHandler navigation
 
 ---
+
+## Installation
+
+You can install this extension in several ways:
+
+1. Search for `Go Command/Query to Handler` in VS Code Extensions view
+2. [Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=aykanferhat.go-cq-to-handler)
+3. Use VS Code Quick Open (Ctrl+P/Cmd+P): `ext install aykanferhat.go-cq-to-handler`
 
 **Enjoy!**

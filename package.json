@@ -1,0 +1,63 @@
+{
+  "name": "go-cq-to-handler",
+  "displayName": "Go Command/Query to Handler",
+  "description": "Easily navigate between Go Command/Query structures and their corresponding Handlers using CodeLens",
+  "version": "0.0.1",
+  "publisher": "aykanferhat",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "icon": "images/icon.png",
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "go",
+    "golang",
+    "codelens",
+    "navigation",
+    "command",
+    "query",
+    "handler",
+    "cqrs"
+  ],
+  "activationEvents": [
+    "onLanguage:go"
+  ],
+  "main": "out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "go-cq-to-handler.navigateToHandler",
+        "title": "Navigate to Handler"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "eslint": "^8.18.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4",
+    "@vscode/test-electron": "^2.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aykanferhat/go-cq-to-handler.git"
+  }
+}

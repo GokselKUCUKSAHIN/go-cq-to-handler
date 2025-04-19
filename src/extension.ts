@@ -6,8 +6,8 @@ import * as path from 'path';
 
 class GoHandlerCodeLensProvider implements vscode.CodeLensProvider {
 	private regex = {
-		command: /type\s+(\w+Command)\s+struct/,
-		query: /type\s+(\w+Query)\s+struct/
+		command: /type\s+(\w+Command)((\s*\[(.*?)\]\s*)|\s+)struct/,
+		query: /type\s+(\w+Query)((\s*\[(.*?)\]\s*)|\s+)struct/
 	};
 
 	provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CodeLens[]> {
@@ -22,7 +22,7 @@ class GoHandlerCodeLensProvider implements vscode.CodeLensProvider {
 		const lines = text.split('\n');
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i];
-			
+
 			// Check for Command struct
 			const commandMatch = line.match(this.regex.command);
 			if (commandMatch) {
@@ -30,20 +30,20 @@ class GoHandlerCodeLensProvider implements vscode.CodeLensProvider {
 				const commandName = commandMatch[1];
 				// Make sure we keep the 'Command' part when generating the handler name
 				let handlerName = commandName.replace(/Command$/, '') + 'CommandHandler';
-				
+
 				// Also check for handlers with lowercase first letter (camelCase)
 				const handlerNames = [
-					handlerName, 
+					handlerName,
 					handlerName.charAt(0).toLowerCase() + handlerName.slice(1)
 				];
-				
+
 				codeLenses.push(new vscode.CodeLens(range, {
 					title: `➜ Go to ${handlerName}`,
 					command: 'go-cq-to-handler.navigateToHandler',
 					arguments: [handlerNames]
 				}));
 			}
-			
+
 			// Check for Query struct
 			const queryMatch = line.match(this.regex.query);
 			if (queryMatch) {
@@ -51,13 +51,13 @@ class GoHandlerCodeLensProvider implements vscode.CodeLensProvider {
 				const queryName = queryMatch[1];
 				// Make sure we keep the 'Query' part when generating the handler name
 				let handlerName = queryName.replace(/Query$/, '') + 'QueryHandler';
-				
+
 				// Also check for handlers with lowercase first letter (camelCase)
 				const handlerNames = [
-					handlerName, 
+					handlerName,
 					handlerName.charAt(0).toLowerCase() + handlerName.slice(1)
 				];
-				
+
 				codeLenses.push(new vscode.CodeLens(range, {
 					title: `➜ Go to ${handlerName}`,
 					command: 'go-cq-to-handler.navigateToHandler',
@@ -78,12 +78,12 @@ async function findHandlerFile(handlerName: string): Promise<string | undefined>
 		return undefined;
 	}
 
-	const handlerRegex = new RegExp(`type\\s+(${handlerName}|${handlerName.charAt(0).toLowerCase() + handlerName.slice(1)})\\s+struct`, 'i');
-	
+	const handlerRegex = new RegExp(`type\\s+(${handlerName}|${handlerName.charAt(0).toLowerCase() + handlerName.slice(1)})((\\s*\\[(.*?)\\]\\s*)|\\s+)struct`, 'i');
+
 	const files = await vscode.workspace.findFiles('**/*.go');
 	for (const file of files) {
 		const content = fs.readFileSync(file.fsPath, 'utf8');
-		
+
 		if (handlerRegex.test(content)) {
 			console.log(`Found handler in file: ${file.fsPath}`);
 			return file.fsPath;
@@ -112,13 +112,13 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('go-cq-to-handler.navigateToHandler', async (handlerNamesArg: string | string[]) => {
 			// Convert to array if it's a single string
 			const handlerNames = Array.isArray(handlerNamesArg) ? handlerNamesArg : [handlerNamesArg];
-			
+
 			console.log(`Looking for handlers: ${handlerNames.join(', ')}`);
-			
+
 			// Try to find any of the handler variants
 			let handlerFile: string | undefined;
 			let foundHandlerName: string | undefined;
-			
+
 			for (const handlerName of handlerNames) {
 				handlerFile = await findHandlerFile(handlerName);
 				if (handlerFile) {
@@ -126,18 +126,18 @@ export function activate(context: vscode.ExtensionContext) {
 					break;
 				}
 			}
-			
+
 			if (handlerFile && foundHandlerName) {
 				const document = await vscode.workspace.openTextDocument(handlerFile);
 				await vscode.window.showTextDocument(document);
-				
+
 				// Find and highlight the handler struct
 				const text = document.getText();
 				const lines = text.split('\n');
-				
+
 				// Create a regex to match the handler struct with case insensitivity
 				const handlerRegex = new RegExp(`type\\s+(${foundHandlerName}|${foundHandlerName.charAt(0).toLowerCase() + foundHandlerName.slice(1)})\\s+struct`, 'i');
-				
+
 				for (let i = 0; i < lines.length; i++) {
 					if (handlerRegex.test(lines[i])) {
 						const position = new vscode.Position(i, 0);

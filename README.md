@@ -73,6 +73,12 @@ Initial release of Go Command/Query to Handler
 - Added support for Command to CommandHandler navigation
 - Added support for Query to QueryHandler navigation
 
+### 0.0.3
+
+Generic Support
+- Added support for Generic Command to CommandHandler navigation
+- Added support for Generic Query to QueryHandler navigation
+
 ---
 
 ## Installation

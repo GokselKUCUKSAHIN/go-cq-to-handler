@@ -2,7 +2,7 @@
   "name": "go-cq-to-handler",
   "displayName": "Go Command/Query to Handler",
   "description": "Easily navigate between Go Command/Query structures and their corresponding Handlers using CodeLens",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "aykanferhat",
   "license": "MIT",
   "engines": {
